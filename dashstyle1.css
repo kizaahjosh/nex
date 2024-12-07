@@ -1,0 +1,206 @@
+/* Sidebar Styles */
+.sidebar {
+    width: 50px; /* Default width with only icons visible */
+    background-color: #c45f07; /* Bright orange */
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 0; /* Ensure it starts from the top */
+    left: 0; /* Ensure it aligns on the left */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push profile link to the bottom */
+    transition: width 0.3s; /* Smooth transition for expanding */
+}
+
+/* Sidebar title */
+.sidebar-title {
+    margin-bottom: 30px;
+    text-align: center;
+    color: #fff;
+    display: none; /* Hide title when collapsed */
+}
+
+/* Main sidebar menu styles */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Makes the menu take up available space */
+}
+
+/* Main menu items */
+.sidebar-menu.main-menu li {
+    margin-bottom: 15px;
+}
+
+/* Link styles for main menu items */
+.sidebar-menu.main-menu li a {
+    text-decoration: none;
+    color: #fff; /* White text */
+    font-size: 20px;
+    display: flex;
+    align-items: center; /* Align icon and text */
+    padding: 20px;
+    transition: background-color 0.3s;
+}
+
+/* Icon style */
+.sidebar-menu.main-menu li a i {
+    margin-right: 10px; /* Space between icon and text */
+    font-size: 20px; /* Icon size */
+}
+
+/* Menu text visibility */
+.menu-text {
+    display: none; /* Hide text by default */
+}
+
+/* Hover effect */
+.sidebar:hover {
+    width: 250px; /* Expand width when hovering */
+}
+
+/* Show text when sidebar is hovered */
+.sidebar:hover .menu-text {
+    display: inline; /* Show text labels when hovering */
+}
+
+/* Show title when sidebar is hovered */
+.sidebar:hover .sidebar-title {
+    display: block; /* Show sidebar title on hover */
+}
+
+/* Hover effect on menu items */
+.sidebar-menu.main-menu li a:hover {
+    background-color: #6c2b00; /* Darker orange on hover */
+    border-radius: 8px;
+}
+
+/* Profile link styling */
+.sidebar-menu.profile-link li a {
+    text-decoration: none;
+    color: #fff; /* White text */
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+/* Profile link positioning at the bottom */
+.sidebar-menu.profile-link {
+    margin-top: auto; /* Push the profile link to the bottom */
+}
+
+/* Profile link icon */
+.profile-link i {
+    margin-right: 10px; /* Space between icon and text */
+    font-size: 20px; /* Size of the human icon */
+}
+
+/* Optional: Hover effect on Profile */
+.profile-link a:hover {
+    background-color: #6c2b00; /* Darker orange on hover */
+    border-radius: 8px;
+    transform: scale(1.05); /* Slight scale effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #333; /* Dark background for navbar */
+    color: white;
+    margin-left: 70px; /* Push navbar to the right of the sidebar */
+    border: 2px solid #c45f07; /* Border with the sidebar color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: left 0.3s, box-shadow 0.3s; /* Smooth transition for the navbar and shadow */
+}
+
+/* Navbar Title (Centered) */
+.navbar-left {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Center the title horizontally */
+    align-items: center; /* Align vertically */
+}
+
+.navbar-left h2 {
+    margin: 0;
+    text-align: center;
+}
+
+/* Logo Space */
+.navbar-left .logo {
+    margin-right: 15px; /* Space between logo and title */
+}
+
+/* Navbar Right (Logout) */
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right .logout-link {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #c45f07;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar-right .logout-link:hover {
+    background-color: #6c2b00; /* Darker orange on hover */
+}
+/* Style for the stats container */
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center all the stat boxes horizontally */
+    gap: 20px; /* Space between the stat boxes */
+    margin-top: 30px;
+}
+
+/* Style for each stat box */
+.stat-box {
+    background-color: #f4f4f4; /* Light background */
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #c45f07;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for better visibility */
+    width: 250px; /* Define a fixed width for each stat box */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.stat-box:hover {
+    transform: translateY(-5px); /* Lift the stat box slightly when hovered */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.stat-box h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.stat-box p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #c45f07; /* Bright orange color */
+}
+/* Center the main content heading (h3) */
+.main-content h3 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333;
+}
+

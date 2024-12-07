@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEx Community Dashboard</title>
+    <link rel="stylesheet" href="tlstyle1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2 class="sidebar-title">DASHBOARD</h2>
+    
+    <!-- Main Sidebar Menu Items -->
+    <ul class="sidebar-menu main-menu">
+        <li><a class="active1" href="index.html"><i class="fas fa-home"></i><span class="menu-text"> Home</span></a></li>
+        <li><a class="active2" href="Tools&Equipment.html"><i class="fas fa-tools"></i><span class="menu-text"> Tools & Equipment</span></a></li>
+        <li><a class="active3" href="PROFILE.html"><i class="fas fa-user"></i><span class="menu-text"> Profile</span></a></li>
+        <li><a class="active4" href="notifications.html"><i class="fas fa-bell"></i><span class="menu-text"> Notifications</span></a></li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="content-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <h2>NEx Community Dashboard</h2>
+        </div>
+        <div class="navbar-right">
+            <a class="logout-link" href="logout.php">Logout</a>
+        </div>
+    </nav>
+    <div class="main-content">
+        <h1>TOOLS AND EQUIPMENT</h1>
+            <p>Choose from the available tools and equipment categories below to exchange/borrow.</p>
+
+              <!-- Equipment Selection Dropdown -->
+            <div class="select-container">
+                <label for="equipmentSelect" class="select-label">Select Equipment Category:</label>
+                <select id="equipmentSelect" onchange="displayEquipment(this.value)">
+                    <option value="1">Gardening Equipment</option>
+                    <option value="2">Home Improvement Tools</option>
+                    <option value="3">Outdoor & Recreational Equipment</option>
+                    <option value="4">Fitness Equipment</option>
+                    <option value="5">Party and Event Equipment</option>
+                    <option value="6">Cleaning and Maintenance Equipment</option>
+                    <option value="7">Tools for Home Renovation</option>
+                    <option value="8">Seasonal Equipment</option>
+                    <option value="9">Childcare & Baby Equipment</option>
+                    <option value="10">Holiday or Festival Equipment</option>
+                    <option value="11">Technology Equipment</option>
+                    <option value="12">Shared Community Equipment</option>
+                </select>
+    </div>
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Item Information</h2>
+            <div id="infoContent"></div>
+        </div>
+    </div>
+                <!-- Equipment Display Section -->
+                <div class="equipment-display">
+                    <div class="equipment-category" id="equipmentCategory">
+                        <!-- Dynamically updated content based on dropdown selection -->
+                    </div>
+                </div>
+            </div>
+        </div>
+</div><!-- Borrow Modal -->
+<div id="borrowModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeBorrowModal()">&times;</span>
+        <h2>Borrow Item</h2>
+        <form id="borrowForm">
+            <label for="borrowerName">Your Name:</label>
+            <input type="text" id="borrowerName" name="borrowerName" required><br><br>
+
+            <label for="borrowerContact">Your Contact:</label>
+            <input type="text" id="borrowerContact" name="borrowerContact" required><br><br>
+
+            <label for="borrowerAddress">Your Address:</label>
+            <input type="text" id="borrowerAddress" name="borrowerAddress" required><br><br>
+
+            <label for="returnDate">Return Date:</label>
+            <input type="date" id="returnDate" name="returnDate" required><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<!-- Agreement Modal -->
+<div id="agreementModal" class="modal">
+    <div class="modal-content">
+        <h2>Agreement</h2>
+        <p>By accepting, you agree to the terms and conditions for borrowing this item.</p>
+        <button id="acceptAgreement" onclick="acceptAgreement()">Accept</button>
+        <button id="declineAgreement" onclick="declineAgreement()">Decline</button>
+    </div>
+</div> 
+
+<div id="exchangeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeExchangeModal()">&times;</span>
+        <h2>Exchange Item</h2>
+        <form id="exchangeForm">
+            <label for="exchangeFullName">Full Name:</label>
+            <input type="text" id="exchangeFullName" name="exchangeFullName" required><br><br>
+
+            <label for="exchangeContact">Contact Number:</label>
+            <input type="text" id="exchangeContact" name="exchangeContact" required><br><br>
+
+            <label for="exchangeAddress">Address:</label>
+            <input type="text" id="exchangeAddress" name="exchangeAddress" required><br><br>
+
+            <label for="exchangeItem">Item to Exchange:</label>
+            <input type="text" id="exchangeItem" name="exchangeItem" required><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<!-- Exchange Agreement Modal -->
+<div id="exchangeAgreementModal" class="modal">
+    <div class="modal-content">
+        <h2>Exchange Agreement</h2>
+        <p>By accepting, you agree to the terms and conditions for exchanging the item.</p>
+        <button id="acceptExchangeAgreement" onclick="acceptExchangeAgreement()">Accept</button>
+        <button id="declineExchangeAgreement" onclick="declineExchangeAgreement()">Decline</button>
+    </div>
+</div>
+
+    <script>
+ // Equipment categories data (with items and descriptions)
+ const equipmentCategories = [
+    {
+        name: "Gardening Equipment",
+        items: [
+            {
+                name: "Lawnmower",
+                image: "lawn.jpg",
+                owner: "John Doe",
+                contact: "123-456-7890",
+                address: "123 Green St, Springfield",
+                itemsIssued: ["Shovels", "Leaf Blower"],
+                exchangeInterest: ["Garden Fork", "Pruning Shears"]
+            },
+            {
+                name: "Leaf Blower",
+                image: "leaf.jpg",
+                owner: "Jane Smith",
+                contact: "987-654-3210",
+                address: "456 Garden Ave, Springfield",
+                itemsIssued: ["Lawnmower", "Wheelbarrow"],
+                exchangeInterest: ["Garden Hose", "Rake"]
+            },
+            {
+                name: "Shovels, Rakes, and Spades",
+                image: "shov.jpg",
+                owner: "John Doe",
+                contact: "123-456-7890",
+                address: "123 Green St, Springfield",
+                itemsIssued: ["Shovels", "Leaf Blower"],
+                exchangeInterest: ["Garden Fork", "Pruning Shears"]
+            },
+            {
+                name: "Garden Hose",
+                image: "hose.jpg",
+                owner: "Jane Smith",
+                contact: "987-654-3210",
+                address: "456 Garden Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Garden Fork"]
+            },
+            {
+                name: "Wheelbarrow",
+                image: "wheel.jpg",
+                owner: "John Doe",
+                contact: "123-456-7890",
+                address: "123 Green St, Springfield",
+                itemsIssued: ["Leaf Blower"],
+                exchangeInterest: ["Garden Hose"]
+            },
+            {
+                name: "Pruning Shears",
+                description: "For trimming branches, plants, and shrubs.",
+                image: "prunning.jpg",
+                owner: "Jane Smith",
+                contact: "987-654-3210",
+                address: "456 Garden Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Garden Fork"]
+            },
+            {
+                name: "Garden Fork",
+                description: "Used for turning over soil or compost.",
+                image: "fork.jpg",
+                owner: "John Doe",
+                contact: "123-456-7890",
+                address: "123 Green St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Pruning Shears"]
+            }
+        ]
+    },
+                    
+    {
+        name: "Home Improvement Tools",
+        items: [
+            {
+                name: "Power Drill",
+                image: "drill.jpg",
+                owner: "Alice Cooper",
+                contact: "111-222-3333",
+                address: "789 Drill St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Hammer", "Screwdrivers"]
+            },
+            {
+                name: "Hammer, Screwdrivers, and Wrenches",
+                image: "screwset.jpg",
+                owner: "Bob Marley",
+                contact: "444-555-6666",
+                address: "101 Hammer Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Power Drill"]
+            },
+            {
+                name: "Ladder",
+                image: "ladder.jpg",
+                owner: "Charlie Brown",
+                contact: "555-666-7777",
+                address: "202 Ladder Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Saw"]
+            },
+            {
+                name: "Saw",
+                image: "saw.jpg",
+                owner: "David Bowie",
+                contact: "888-999-0000",
+                address: "303 Saw Blvd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Power Drill"]
+            },
+            {
+                name: "Paint Sprayer or Brushes",
+                image: "spray.jpg",
+                owner: "Eve White",
+                contact: "666-777-8888",
+                address: "404 Paint St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Rollers"]
+            }
+        ]
+    },
+    {
+        name: "Outdoor & Recreational Equipment",
+        items: [
+            {
+                name: "Bicycle Wheels",
+                image: "wheel.jpg",
+                owner: "Frank Green",
+                contact: "222-333-4444",
+                address: "505 Cycle Ln, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Camping Gear"]
+            },
+            {
+                name: "Camping Gear",
+                image: "camping.jpg",
+                owner: "Grace Red",
+                contact: "333-444-5555",
+                address: "606 Camp Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Bicycles"]
+            },
+            {
+                name: "Barbecues/Grills",
+                image: "grills.jpg",
+                owner: "Harry Yellow",
+                contact: "444-555-6666",
+                address: "707 BBQ St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Coolers"]
+            },
+            {
+                name: "Coolers",
+                image: "cooler.jpg",
+                owner: "Ivy Blue",
+                contact: "555-666-7777",
+                address: "808 Cooler Dr, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Grill"]
+            },
+            {
+                name: "Fishing Rod",
+                image: "rod.jpg",
+                owner: "Jack White",
+                contact: "666-777-8888",
+                address: "909 Fish Ln, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Camping Gear"]
+            }
+        ]
+    },
+    {
+        name: "Fitness Equipment",
+        items: [
+            {
+                name: "Dumbbells",
+                image: "dumbell.jpg",
+                owner: "Kara Gold",
+                contact: "777-888-9999",
+                address: "101 Dumbbell Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Yoga Mats"]
+            },
+            {
+                name: "Yoga Mats",
+                image: "mat.jpg",
+                owner: "Leo Black",
+                contact: "888-999-0000",
+                address: "202 Yoga Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Resistance Bands"]
+            },
+            {
+                name: "Resistance Bands",
+                image: "bands.jpg",
+                owner: "Maya Pink",
+                contact: "999-000-1111",
+                address: "303 Resistance St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Yoga Mats"]
+            },
+            {
+                name: "Jump Ropes",
+                image: "jump.jpg",
+                owner: "Oscar Silver",
+                contact: "111-222-3333",
+                address: "505 Jump Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Resistance Bands"]
+            }
+        ]
+    },
+    {
+        name: "Party and Event Equipment",
+        items: [
+            {
+                name: "Tables and Chairs",
+                image: "tbls.jpg",
+                owner: "Paul Orange",
+                contact: "222-333-4444",
+                address: "606 Event Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Tents"]
+            },
+            {
+                name: "Tents",
+                image: "tent.jpg",
+                owner: "Quincy Blue",
+                contact: "333-444-5555",
+                address: "707 Tent Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Chairs"]
+            },
+            {
+                name: "Speakers and Sound Systems",
+                image: "sound.jpg",
+                owner: "Rachel Green",
+                contact: "444-555-6666",
+                address: "808 Speaker St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Projectors"]
+            },
+            {
+                name: "Projectors",
+                image: "projector'.jpg",
+                owner: "Steve Brown",
+                contact: "555-666-7777",
+                address: "909 Projector Ln, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Sound Systems"]
+            },
+            {
+                name: "Balloons",
+                image: "balloon.jpg",
+                owner: "Tina Black",
+                contact: "666-777-8888",
+                address: "101 String Blvd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Speakers"]
+            }
+        ]
+    },
+    {
+        name: "Cleaning and Maintenance Equipment",
+        items: [
+            {
+                name: "Pressure Washers",
+                image: "pressure_washers.jpg",
+                owner: "Ursula White",
+                contact: "777-888-9999",
+                address: "202 Pressure Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Vacuum Cleaners"]
+            },
+            {
+                name: "Vacuum Cleaners",
+                image: "vacuum_cleaners.jpg",
+                owner: "Victor Green",
+                contact: "888-999-0000",
+                address: "303 Vacuum St, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Pressure Washers"]
+            },
+            {
+                name: "Floor Scrubbers",
+                image: "floor_scrubbers.jpg",
+                owner: "Wendy Pink",
+                contact: "999-000-1111",
+                address: "404 Floor Ln, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Gutter Cleaners"]
+            },
+            {
+                name: "Gutter Cleaners",
+                image: "gutter_cleaners.jpg",
+                owner: "Xander Silver",
+                contact: "000-111-2222",
+                address: "505 Gutter Ave, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Leaf Mulchers"]
+            },
+            {
+                name: "Leaf Mulchers",
+                image: "leaf_mulchers.jpg",
+                owner: "Yvonne Brown",
+                contact: "111-222-3333",
+                address: "606 Leaf Rd, Springfield",
+                itemsIssued: [],
+                exchangeInterest: ["Pressure Washers"]
+            }
+        ]
+    },
+    // Add the other categories following the same structure...
+]
+        // Function to update the displayed equipment category based on the dropdown value
+        function displayEquipment(value) {
+            const category = equipmentCategories[value - 1];
+            const equipmentCategory = document.getElementById('equipmentCategory');
+            
+            // Start with category title
+            equipmentCategory.innerHTML = `<h3>${category.name}</h3>`;
+
+            // Loop through items and display them dynamically
+            const equipmentList = category.items.map(item => {
+                return `
+                    <div class="equipment-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <h4>${item.name}</h4>
+                        <div class="buttons">
+                            <button onclick="showBorrowForm('${item.name}')">Borrow</button>
+                            <button onclick="showExchangeForm('${item.name}')">Exchange</button>
+                            <button onclick="showInformation('${item.name}')">More Information</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            // Add items to the equipment display area
+            equipmentCategory.innerHTML += `<div class="equipment-list">${equipmentList}</div>`;
+        }
+
+        // Initialize with the first equipment category
+        displayEquipment(1);
+
+       
+        // Function to show More Information
+function showInformation(itemName) {
+    // Find the item from the categories array
+    const item = equipmentCategories.flatMap(category => category.items).find(item => item.name === itemName);
+
+    if (item) {
+        // Build the information content
+        const infoContent = `
+            <h3>${item.name}</h3>
+            <p><strong>Owner:</strong> ${item.owner}</p>
+            <p><strong>Contact:</strong> ${item.contact}</p>
+            <p><strong>Address:</strong> ${item.address}</p>
+            <p><strong>Items Issued:</strong> ${item.itemsIssued.join(", ")}</p>
+            <p><strong>Interested in Exchanging:</strong> ${item.exchangeInterest.join(", ")}</p>
+        `;
+
+        // Insert the content into the modal
+        document.getElementById('infoContent').innerHTML = infoContent;
+
+        // Display the modal
+        document.getElementById('infoModal').style.display = "block";
+    }
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('infoModal').style.display = "none";
+}
+
+// Function to show Borrow Form (modal)
+function showBorrowForm(itemName) {
+    // Find the item from the categories array
+    const item = equipmentCategories.flatMap(category => category.items).find(item => item.name === itemName);
+
+    if (item) {
+        // Set the modal title and form details based on the item
+        const borrowModal = document.getElementById('borrowModal');
+        borrowModal.querySelector('h2').textContent = `Borrow ${item.name}`;
+        
+        // Open the modal form
+        borrowModal.style.display = "block";
+    }
+}
+
+// Function to close the Borrow Form modal
+function closeBorrowModal() {
+    document.getElementById('borrowModal').style.display = 'none';
+}
+
+// Show Borrow Form modal
+function openBorrowModal() {
+    document.getElementById('borrowModal').style.display = 'block';
+}
+
+// Show Agreement modal
+function showAgreementModal() {
+    document.getElementById('agreementModal').style.display = 'block';
+}
+
+// Function to handle form submission
+document.getElementById('borrowForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+    
+    // Show the agreement modal
+    showAgreementModal();
+});
+
+// Accept the agreement
+function acceptAgreement() {
+    // Handle the acceptance logic (e.g., submit the form data)
+    alert("You are being redirected to contact the owner of the item.");
+    
+    // Close the agreement modal
+    document.getElementById('agreementModal').style.display = 'none';
+    
+    // Close the borrow form modal
+    document.getElementById('borrowModal').style.display = 'none';
+    
+    // Redirect to chat.php
+    window.location.href = "chat.php";  // Redirect to chat.php
+}
+
+// Decline the agreement
+function declineAgreement() {
+    // Handle the decline logic
+    alert("You have declined the agreement.");
+    
+    // Close the agreement modal
+    document.getElementById('agreementModal').style.display = 'none';
+}
+
+
+
+// Function to show Exchange Form (modal)
+function showExchangeForm(itemName) {
+    // Find the item from the categories array
+    const item = equipmentCategories.flatMap(category => category.items).find(item => item.name === itemName);
+
+    if (item) {
+        // Set the modal title and form details based on the item
+        const exchangeModal = document.getElementById('exchangeModal');
+        exchangeModal.querySelector('h2').textContent = `Exchange ${item.name}`;
+        
+        // Open the modal form
+        exchangeModal.style.display = "block";
+    }
+}
+
+// Function to close the Exchange Form modal
+function closeExchangeModal() {
+    document.getElementById('exchangeModal').style.display = 'none';
+}
+
+// Show Exchange Form modal
+function openExchangeModal() {
+    document.getElementById('exchangeModal').style.display = 'block';
+}
+
+// Show Exchange Agreement modal
+function showExchangeAgreementModal() {
+    document.getElementById('exchangeAgreementModal').style.display = 'block';
+}
+
+// Handle form submission
+document.getElementById('exchangeForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+    
+    // Show the exchange agreement modal
+    showExchangeAgreementModal();
+});
+
+// Accept the exchange agreement
+function acceptExchangeAgreement() {
+    // Handle the acceptance logic (e.g., submit the form data)
+    alert("You are being redirected to contact the owner of the item.");
+    
+    // Close the agreement modal
+    document.getElementById('exchangeAgreementModal').style.display = 'none';
+    
+    // Close the exchange form modal
+    document.getElementById('exchangeModal').style.display = 'none';
+    
+    // Redirect to chat.php
+    window.location.href = "chat.php";  // Redirect to chat.php
+}
+
+// Decline the exchange agreement
+function declineExchangeAgreement() {
+    // Handle the decline logic
+    alert("You have declined the exchange agreement.");
+    
+    // Close the agreement modal
+    document.getElementById('exchangeAgreementModal').style.display = 'none';
+}
+
+
+    </script>
+
+</body>
+</html>
